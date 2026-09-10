@@ -25,7 +25,10 @@ const {
   noindex = false,
 } = Astro.props;
 const canonical = noindex ? site + '/404.html' : site + pairs[pageKey][locale];
-const fullTitle = title + ' | Nguyen Linh Protector';
+const fullTitle =
+  pageKey === 'home'
+    ? `${business.brand} | ${title}`
+    : `${title} | ${business.brand}`;
 const socialImage = site + `/brand/open-graph-${locale}.png`;
 const socialImageAlt =
   locale === 'en'
@@ -57,6 +60,7 @@ const graph: Record<string, unknown>[] = [
     '@id': site + '/#website',
     url: site,
     name: business.brand,
+    alternateName: [business.name, 'nguyenlinhprotector.net'],
     inLanguage: ['en', 'vi'],
     publisher: { '@id': site + '/#organization' },
   },
