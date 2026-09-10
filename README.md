@@ -20,7 +20,7 @@ npm run validate
 npm run preview
 ```
 
-Build output: `dist/`. Preview: `http://localhost:4321`. All 30 content routes are prerendered, with a separate `404.html`. The static site builds without credentials. Successful contact delivery requires the environment variables listed in `.env.example`; use `vercel dev` for an end-to-end local Function test.
+Build output: `dist/`. Preview: `http://localhost:4321`. All 32 content routes are prerendered, with a separate `404.html`. The static site builds without credentials. Successful contact delivery requires the environment variables listed in `.env.example`; use `vercel dev` for an end-to-end local Function test.
 
 ## Project structure
 
@@ -32,13 +32,14 @@ Build output: `dist/`. Preview: `http://localhost:4321`. All 30 content routes a
 - `src/content/insights/`: three English articles and corresponding Vietnamese translations.
 - `src/components/`: shared page rendering, header, footer, language switcher, breadcrumbs, service cards, process steps, inquiry CTA, SEO, and JSON-LD.
 - `api/contact.ts`: validated Vercel Function for Resend inquiry and acknowledgment emails.
+- `api/resend-webhook.ts`: signed Resend webhook receiver for delivery, bounce, failure, and complaint events.
 - `src/layouts/Base.astro`: shared document shell.
 - `src/pages/[...path].astro`: static page and article routes from typed route pairs.
 - `src/styles/global.css`: design tokens, responsive layouts, focus treatment, and reduced-motion support.
 - `public/brand/`: approved SVG logo assets and an Apple Touch Icon exported from the approved mark.
 - `scripts/`: generated-output, browser accessibility/layout, and Lighthouse checks.
 
-The header provides direct links to all four services through a native desktop disclosure and the mobile navigation. Both homepages include an issue selector and reuse `InsightCards.astro` to feature the three localized Content Collection articles.
+The header provides direct links to all four services through a native desktop disclosure and the mobile navigation. Both homepages include an issue selector and reuse `InsightCards.astro` to feature the four localized Content Collection articles.
 
 ## Content and branding
 
@@ -48,7 +49,7 @@ Each article has paired localized routes, title, description, publication/update
 
 To edit an article, update its Markdown and `updated` date. For a new article pair, add both Markdown files, its route pair in `routes.ts`, and the permitted translation key in the content schema. Keep both translations aligned. Rerun all build/output checks after changes.
 
-Metadata is generated centrally: unique titles/descriptions, absolute self-referencing canonicals, `en`, `vi`, and `x-default` alternates, Open Graph/X metadata, and visible-content JSON-LD. The official Astro sitemap integration uses the same route map, including translated slugs. The nonindexable 404 is excluded from the sitemap.
+Metadata is generated centrally: unique titles/descriptions, absolute self-referencing canonicals, `en`, `vi`, and `x-default` alternates, localized 1200 × 630 Open Graph/X images, and visible-content JSON-LD. The official Astro sitemap integration uses the same route map, including translated slugs. The nonindexable 404 is excluded from the sitemap. Run `npm run generate:og` to reproduce the social images from the approved mark and generated background artwork.
 
 ## Verification
 
@@ -65,7 +66,7 @@ The browser script uses installed Google Chrome through Playwright. It visits ev
 
 Lighthouse runs against the local production preview using mobile simulation for both homepages, the English DMCA article, and the Vietnamese contact page. Chrome is discovered automatically; set `CHROME_PATH` if necessary. Reports are saved under `reports/`. Scores are lab measurements, not guarantees for a deployed site. INP needs real user interaction data; a zero-JavaScript implementation and measured TBT are not an INP measurement.
 
-`npm run validate` checks every generated content route, unique metadata, one H1, canonical and alternate URLs, corresponding language switches, internal links and fragments, JSON-LD parsing, image attributes, absence of client scripts/forms, common placeholders, sitemap alternatives, robots, and the 404 noindex directive. JSON-LD parsing does not substitute for search-engine rich-result eligibility checks after deployment.
+`npm run validate` checks every generated content route, unique metadata, one H1, canonical and alternate URLs, corresponding language switches, internal links and fragments, JSON-LD parsing, image attributes, controlled contact scripts/forms, social-image metadata, common placeholders, sitemap alternatives, robots, and the 404 noindex directive. JSON-LD parsing does not substitute for search-engine rich-result eligibility checks after deployment.
 
 Production HTML and CSS are minified. Astro emits hashed CSS under `/_astro/`, suitable for Vercel’s static asset caching. The only browser script handles contact-form status without a UI framework. The root `api/contact.ts` endpoint is deployed as a Vercel Function, so no Astro server adapter or `vercel.json` is required. Retest response headers, function delivery, and performance on the live domain.
 
@@ -76,6 +77,7 @@ The form is available on both contact routes and sends the same structured inqui
 Copy `.env.example` to a local untracked environment file or configure these values directly in Vercel:
 
 - `RESEND_API_KEY`: secret Resend API key.
+- `RESEND_WEBHOOK_SECRET`: signing secret from the production webhook details page.
 - `CONTACT_FROM_EMAIL`: sender using a domain verified in Resend.
 - `CONTACT_TO_EMAIL`: inbox receiving website inquiries; defaults to `inquiry@nguyenlinhprotector.net`.
 
@@ -83,7 +85,10 @@ Never expose `RESEND_API_KEY` in public Astro variables or browser code. The loc
 
 ```sh
 npm run test:contact
+npm run test:webhook
 ```
+
+After deploying `api/resend-webhook.ts`, create a Resend webhook with endpoint `https://nguyenlinhprotector.net/api/resend-webhook` and subscribe to `email.delivered`, `email.bounced`, `email.failed`, and `email.complained`. Copy its signing secret to the Vercel `RESEND_WEBHOOK_SECRET` variable and redeploy. The endpoint verifies the raw signed payload and records only event, message, and inquiry identifiers in Vercel Function logs. Outbound website emails carry `source`, `message_type`, and `inquiry_id` tags for correlation.
 
 For stronger distributed abuse protection, add a Vercel Firewall rate-limit rule for `/api/contact` after deployment. The in-function rate limit is intentionally an additional best-effort layer because serverless instances do not share memory.
 
@@ -100,9 +105,9 @@ For stronger distributed abuse protection, add a Vercel Firewall rate-limit rule
 9. Set the apex domain as primary.
 10. Redirect `www` to the apex domain using Vercel’s domain settings. Apply exactly the DNS records Vercel provides at the DNS host; preserve existing email MX/TXT records and the new Resend records.
 11. Verify HTTPS, the `www` redirect, form delivery and acknowledgment, then check live canonicals, robots, sitemap, navigation, email, and telephone actions. Confirm the live hosting cache headers for hashed assets.
-12. Add a Vercel Firewall rate-limit rule for `/api/contact`, monitor Function logs, verify the domain in Google Search Console, and submit `https://nguyenlinhprotector.net/sitemap-index.xml`.
+12. Add a Vercel Firewall rate-limit rule for `/api/contact` and monitor Function and Resend webhook logs.
 
-No production deployment or domain connection has been performed. GitHub repository creation/push, Vercel import, DNS changes, and Search Console verification remain owner actions.
+The GitHub repository, Vercel production deployment, custom domain, Google Search Console connection, and sitemap submission are active. Webhook registration and its Vercel signing-secret variable remain owner dashboard actions.
 
 ## Owner review before publication
 
@@ -130,6 +135,7 @@ No production deployment or domain connection has been performed. GitHub reposit
 | `/terms-of-use/`                                    | `/vi/dieu-khoan-su-dung/`                              |
 | `/insights/document-online-copyright-infringement/` | `/vi/kien-thuc/ghi-nhan-vi-pham-ban-quyen-truc-tuyen/` |
 | `/insights/dmca-notice-information/`                | `/vi/kien-thuc/thong-tin-thong-bao-dmca/`              |
+| `/insights/dmca-counter-notification-guide/`        | `/vi/kien-thuc/huong-dan-thong-bao-phan-doi-dmca/`     |
 | `/insights/brand-protection-evidence-checklist/`    | `/vi/kien-thuc/danh-sach-bang-chung-thuong-hieu/`      |
 
 Additional output: `/404.html`, `/robots.txt`, `/sitemap-index.xml`, and `/sitemap-0.xml`.

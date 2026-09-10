@@ -42,6 +42,13 @@ for (const pair of Object.values(pairs))
       $('link[rel="canonical"]').attr('href') === site + route,
       `Canonical ${route}`,
     );
+    check(
+      $('meta[property="og:image"]').attr('content') ===
+        site + `/brand/open-graph-${locale}.png` &&
+        $('meta[name="twitter:card"]').attr('content') ===
+          'summary_large_image',
+      `Social image metadata ${route}`,
+    );
     for (const lang of ['en', 'vi', 'x-default'])
       check(
         $(`link[hreflang="${lang}"]`).attr('href') ===
@@ -168,7 +175,7 @@ const result = {
   pages: documents.size,
   indexableRoutes: expected.length,
   checks:
-    'Internal links and fragments, route pairs, unique metadata, canonicals, hreflang, JSON-LD parsing, H1s, image attributes, controlled contact form/client script, placeholders, sitemap, robots',
+    'Internal links and fragments, route pairs, unique metadata, canonicals, hreflang, social images, JSON-LD parsing, H1s, image attributes, controlled contact form/client script, placeholders, sitemap, robots',
   errors,
 };
 await mkdir('reports', { recursive: true });

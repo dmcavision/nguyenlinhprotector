@@ -52,7 +52,7 @@ export const discovery: Record<Locale, Discovery> = {
     guidesEyebrow: 'Practical guidance',
     guidesHeading: 'Prepare a clearer evidence file.',
     guidesIntro:
-      'Three guides to help you document the issue and understand what information to gather before reporting.',
+      'Four guides to help you document the issue and understand what information to gather before reporting or responding to a removal.',
     allGuides: 'View all insights',
   },
   vi: {
@@ -90,7 +90,7 @@ export const discovery: Record<Locale, Discovery> = {
     guidesEyebrow: 'Hướng dẫn thực hành',
     guidesHeading: 'Chuẩn bị hồ sơ bằng chứng rõ ràng.',
     guidesIntro:
-      'Ba hướng dẫn giúp bạn ghi nhận vấn đề và biết cần thu thập thông tin gì trước khi báo cáo.',
+      'Bốn hướng dẫn giúp bạn ghi nhận vấn đề và biết cần thu thập thông tin gì trước khi báo cáo hoặc phản hồi việc gỡ bỏ.',
     allGuides: 'Xem tất cả bài hướng dẫn',
   },
 };

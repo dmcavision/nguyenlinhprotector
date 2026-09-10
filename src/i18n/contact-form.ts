@@ -22,6 +22,7 @@ type ContactFormCopy = {
   submit: string;
   sending: string;
   success: string;
+  reference: string;
   error: string;
   errors: Record<string, string>;
   privacy: string;
@@ -77,6 +78,7 @@ export const contactFormCopy: Record<Locale, ContactFormCopy> = {
     sending: 'Sending…',
     success:
       'Your inquiry has been sent. We will review the information and respond using the email provided.',
+    reference: 'Inquiry reference',
     error:
       'We could not send your inquiry. Please check the fields and try again, or contact us by email.',
     errors: {
@@ -156,6 +158,7 @@ export const contactFormCopy: Record<Locale, ContactFormCopy> = {
     sending: 'Đang gửi…',
     success:
       'Yêu cầu của bạn đã được gửi. Chúng tôi sẽ xem xét và phản hồi qua email bạn cung cấp.',
+    reference: 'Mã yêu cầu',
     error:
       'Không thể gửi yêu cầu. Vui lòng kiểm tra các trường và thử lại hoặc liên hệ trực tiếp qua email.',
     errors: {

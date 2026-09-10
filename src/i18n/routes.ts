@@ -23,13 +23,20 @@ export const pairs = {
     en: '/insights/dmca-notice-information/',
     vi: '/vi/kien-thuc/thong-tin-thong-bao-dmca/',
   },
+  counterGuide: {
+    en: '/insights/dmca-counter-notification-guide/',
+    vi: '/vi/kien-thuc/huong-dan-thong-bao-phan-doi-dmca/',
+  },
   evidence: {
     en: '/insights/brand-protection-evidence-checklist/',
     vi: '/vi/kien-thuc/danh-sach-bang-chung-thuong-hieu/',
   },
 } as const;
 export type PageKey = keyof typeof pairs;
-export type MainKey = Exclude<PageKey, 'document' | 'notice' | 'evidence'>;
+export type MainKey = Exclude<
+  PageKey,
+  'document' | 'notice' | 'counterGuide' | 'evidence'
+>;
 export const mainKeys: MainKey[] = [
   'home',
   'copyright',

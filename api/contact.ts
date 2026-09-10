@@ -137,7 +137,7 @@ function json(body: Record<string, unknown>, status = 200): Response {
   });
 }
 
-function htmlResult(locale: 'en' | 'vi', ok: boolean): Response {
+function htmlResult(locale: 'en' | 'vi', ok: boolean, id?: string): Response {
   const back = locale === 'vi' ? '/vi/lien-he/' : '/contact/';
   const title = ok
     ? locale === 'vi'
@@ -153,8 +153,12 @@ function htmlResult(locale: 'en' | 'vi', ok: boolean): Response {
     : locale === 'vi'
       ? 'Vui lòng quay lại biểu mẫu hoặc liên hệ trực tiếp qua email.'
       : 'Please return to the form or contact us directly by email.';
+  const reference =
+    ok && id
+      ? `<p><strong>${locale === 'vi' ? 'Mã yêu cầu' : 'Inquiry reference'}:</strong> ${id}</p>`
+      : '';
   return new Response(
-    `<!doctype html><html lang="${locale}"><meta charset="utf-8"><meta name="viewport" content="width=device-width"><meta name="robots" content="noindex"><title>${title}</title><style>body{margin:0;background:#071a2b;color:#fff;font:16px/1.7 system-ui,sans-serif}.box{width:min(620px,calc(100% - 40px));margin:12vh auto;padding:36px;border:1px solid #36536a;border-radius:6px}p{color:#b8c9d6}a{display:inline-block;margin-top:14px;padding:12px 18px;border-radius:3px;background:#2864ff;color:#fff;text-decoration:none}</style><main class="box"><h1>${title}</h1><p>${message}</p><a href="${back}">${locale === 'vi' ? 'Quay lại trang liên hệ' : 'Return to contact page'}</a></main></html>`,
+    `<!doctype html><html lang="${locale}"><meta charset="utf-8"><meta name="viewport" content="width=device-width"><meta name="robots" content="noindex"><title>${title}</title><style>body{margin:0;background:#071a2b;color:#fff;font:16px/1.7 system-ui,sans-serif}.box{width:min(620px,calc(100% - 40px));margin:12vh auto;padding:36px;border:1px solid #36536a;border-radius:6px}p{color:#b8c9d6}a{display:inline-block;margin-top:14px;padding:12px 18px;border-radius:3px;background:#2864ff;color:#fff;text-decoration:none}</style><main class="box"><h1>${title}</h1><p>${message}</p>${reference}<a href="${back}">${locale === 'vi' ? 'Quay lại trang liên hệ' : 'Return to contact page'}</a></main></html>`,
     {
       status: ok ? 200 : 500,
       headers: {
@@ -281,6 +285,11 @@ async function handleContact(request: Request): Promise<Response> {
     ].join('\n\n'),
     html: `<h1>New website inquiry</h1><p><strong>Inquiry ID:</strong> ${id}</p><table cellpadding="8" cellspacing="0" border="1" style="border-collapse:collapse"><tr><th align="left">Name</th><td>${safe.name}</td></tr><tr><th align="left">Email</th><td>${safe.email}</td></tr><tr><th align="left">Organization</th><td>${safe.organization || 'Not provided'}</td></tr><tr><th align="left">Relationship</th><td>${safe.relationship}</td></tr><tr><th align="left">Issue type</th><td>${safe.issueType}</td></tr><tr><th align="left">Platform</th><td>${safe.platform}</td></tr><tr><th align="left">URLs</th><td>${safe.urls}</td></tr></table><h2>Explanation</h2><p style="white-space:pre-wrap">${safe.message}</p>`,
     headers: { 'X-Inquiry-ID': id },
+    tags: [
+      { name: 'source', value: 'website-contact' },
+      { name: 'message_type', value: 'inquiry' },
+      { name: 'inquiry_id', value: id },
+    ],
   });
 
   if (error) {
@@ -306,6 +315,11 @@ async function handleContact(request: Request): Promise<Response> {
     replyTo: destination,
     subject: confirmation.subject,
     text: confirmation.text,
+    tags: [
+      { name: 'source', value: 'website-contact' },
+      { name: 'message_type', value: 'acknowledgment' },
+      { name: 'inquiry_id', value: id },
+    ],
   });
   if (acknowledgment.error)
     console.error('Resend acknowledgment error', {
@@ -313,7 +327,9 @@ async function handleContact(request: Request): Promise<Response> {
       name: acknowledgment.error.name,
     });
 
-  return wantsJson ? json({ ok: true, id }) : htmlResult(inquiry.locale, true);
+  return wantsJson
+    ? json({ ok: true, id })
+    : htmlResult(inquiry.locale, true, id);
 }
 
 export default { fetch: handleContact };

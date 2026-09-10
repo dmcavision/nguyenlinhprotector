@@ -11,7 +11,8 @@ let page = await context.newPage();
 for (const width of [1440, 390, 320]) {
   await page.setViewportSize({ width, height: 1000 });
   for (const route of Object.values(pairs).flatMap((p) => [p.en, p.vi])) {
-    await page.goto('http://127.0.0.1:4321' + route);
+    const response = await page.goto('http://127.0.0.1:4321' + route);
+    if (!response?.ok()) errors.push(`HTTP ${response?.status()} at ${route}`);
     const overflow = await page.evaluate(
       () => document.documentElement.scrollWidth > innerWidth,
     );

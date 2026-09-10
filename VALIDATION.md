@@ -5,7 +5,7 @@ Measured September 10, 2026 against the local production build at `http://127.0.
 ## Build and generated output
 
 - `npm run check`: 0 errors, 0 warnings, 0 hints.
-- `npm run build`: 31 static HTML pages (30 canonical content pages plus 404).
+- `npm run build`: 33 static HTML pages (32 canonical content pages plus 404).
 - `npm run validate`: no errors across internal links/fragments, unique metadata, language pairs, canonicals, hreflang, sitemap, robots, H1s, image attributes, and JSON-LD parsing.
 - All pages except the two contact routes have zero executable client JavaScript; the contact routes contain one small form-status script and JSON-LD.
 - Homepage HTML is approximately 12 KB before compression; CSS is bundled and filename-hashed by Astro. No external font or third-party runtime requests.
@@ -14,7 +14,7 @@ Measured September 10, 2026 against the local production build at `http://127.0.
 
 ## Browser coverage
 
-All 30 content routes were visited at 1440px, 390px, and 320px widths. Automated checks cover horizontal overflow and WCAG A/AA axe rules on all mobile routes, a keyboard-accessible skip link and mobile menu, representative 200% text-size views, and reduced-motion behavior. Desktop/mobile screenshots of both homepages, contact, an article, and the Counter Claim service were captured; representative English and Vietnamese layouts were visually inspected.
+All 32 content routes were visited at 1440px, 390px, and 320px widths. Automated checks cover successful HTTP responses, horizontal overflow and WCAG A/AA axe rules on all mobile routes, a keyboard-accessible skip link and mobile menu, representative 200% text-size views, and reduced-motion behavior. Desktop/mobile screenshots of both homepages, contact, articles, and the Counter Claim service were captured; representative English and Vietnamese layouts were visually inspected.
 
 The numeric service labels were darkened to meet contrast requirements. Navigation now wraps when text is enlarged; workflow columns adapt to the available text width. Tests normalize whitespace in the skip-link label to avoid mistaking HTML formatting for an accessibility defect.
 
@@ -31,7 +31,7 @@ These are single-run local lab measurements with mobile simulation, not live-dom
 
 ## Launch checks still requiring the live service
 
-Follow the README for GitHub, Vercel, apex/www DNS, HTTPS, and Search Console setup. Verify live caching/redirect response headers, rich-result interpretation, and performance after deployment. Email and telephone link destinations were checked; actual mailbox delivery and telephone service were not exercised. The owner should confirm operational privacy practices, content, and publication dates before launch.
+GitHub, Vercel, apex/www DNS, HTTPS, Google Search Console, and sitemap submission are active. Continue to verify live caching/redirect response headers, webhook events, rich-result interpretation, and field performance. Email submission was exercised in production; telephone service was not. The owner should confirm operational privacy practices, content, and publication dates.
 
 ## Homepage and navigation update
 
@@ -50,3 +50,7 @@ Production diagnosis later confirmed a successful `200 OK` inquiry through the d
 ## Counter Claim service update
 
 Added paired `/counter-claim/` and `/vi/phan-doi-yeu-cau-go-bo/` service pages, direct navigation, homepage service and issue cards, related DMCA guide links, structured service data, and Counter Claim selections in the contact form and API validation. The service copy distinguishes administrative counter-notification support from legal advice or general moderation appeals and links to the U.S. Copyright Office Section 512 resources. All 30 routes passed desktop/mobile layout and mobile WCAG A/AA checks; the Vietnamese service page was visually inspected at desktop and mobile widths.
+
+## Delivery tracking, social image, and Counter Claim guide update
+
+Added signed Resend webhook handling for delivered, bounced, failed, and complained events, with non-PII log records tied to outbound `inquiry_id` tags. Contact success states now display the server-generated inquiry reference in JavaScript and no-JavaScript flows. Added localized 1200 × 630 Open Graph images using the approved mark and a generated navy/cobalt evidence-network background. Added paired Counter Claim/DMCA counter-notification guides with official statutory sources. Signature rejection, all four tracked events, inquiry-reference rendering, image metadata, HTTP status, responsive layout, and mobile WCAG A/AA checks passed.

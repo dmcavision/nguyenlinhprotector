@@ -11,7 +11,9 @@
     "validate": "node scripts/validate.mjs",
     "test:browser": "node scripts/browser-check.mjs",
     "test:contact": "node scripts/test-contact.mjs",
+    "test:webhook": "node scripts/test-resend-webhook.mjs",
     "test:lighthouse": "node scripts/lighthouse.mjs",
+    "generate:og": "node scripts/generate-og-image.mjs",
     "format": "prettier --write src scripts astro.config.mjs"
   },
   "dependencies": {
@@ -28,6 +30,7 @@
     "prettier": "^3.9.6",
     "prettier-plugin-astro": "^1.0.0",
     "sharp": "^0.35.4",
+    "standardwebhooks": "^1.0.0",
     "typescript": "~6.0.3"
   },
   "engines": {

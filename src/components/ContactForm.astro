@@ -21,6 +21,7 @@ const f = contactFormCopy[locale];
     method="post"
     data-sending={f.sending}
     data-success={f.success}
+    data-reference={f.reference}
     data-error={f.error}
     data-errors={JSON.stringify(f.errors)}
   >
@@ -183,7 +184,7 @@ const f = contactFormCopy[locale];
           throw new Error('Submission failed');
         }
         form.reset();
-        status.textContent = form.dataset.success;
+        status.textContent = `${form.dataset.success} ${form.dataset.reference}: ${result.id}`;
         status.classList.add('is-success');
       } catch {
         if (!receivedResponse) {

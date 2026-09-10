@@ -32,6 +32,17 @@ function request(data, ip, origin = 'https://nguyenlinhprotector.net') {
   });
 }
 
+function htmlRequest(data, ip) {
+  return new Request('https://nguyenlinhprotector.net/api/contact', {
+    method: 'POST',
+    headers: {
+      Origin: 'https://nguyenlinhprotector.net',
+      'X-Forwarded-For': ip,
+    },
+    body: data,
+  });
+}
+
 assert.ok(validateInquiry(validData()).inquiry);
 assert.equal(
   validateInquiry(
@@ -103,8 +114,10 @@ assert.equal(rateLimitedResponse.headers.get('retry-after'), '900');
 process.env.RESEND_API_KEY = 're_test_key';
 const originalFetch = globalThis.fetch;
 let deliveryCalls = 0;
-globalThis.fetch = async () => {
+const deliveryPayloads = [];
+globalThis.fetch = async (_input, init) => {
   deliveryCalls += 1;
+  deliveryPayloads.push(JSON.parse(init.body));
   return Response.json({ id: `email-${deliveryCalls}` });
 };
 try {
@@ -115,6 +128,16 @@ try {
   assert.equal(successResponse.status, 200);
   assert.equal(result.ok, true);
   assert.equal(deliveryCalls, 2);
+  assert.equal(deliveryPayloads[0].tags[2].name, 'inquiry_id');
+  assert.equal(deliveryPayloads[1].tags[1].value, 'acknowledgment');
+
+  const htmlResponse = await contactFunction.fetch(
+    htmlRequest(validData(), '192.0.2.4'),
+  );
+  const html = await htmlResponse.text();
+  assert.equal(htmlResponse.status, 200);
+  assert.match(html, /Inquiry reference:<\/strong> [0-9a-f-]{36}/);
+  assert.equal(deliveryCalls, 4);
 } finally {
   globalThis.fetch = originalFetch;
   delete process.env.RESEND_API_KEY;

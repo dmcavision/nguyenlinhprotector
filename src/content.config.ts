@@ -7,7 +7,7 @@ const insights = defineCollection({
     title: z.string(),
     description: z.string(),
     locale: z.enum(['en', 'vi']),
-    translationKey: z.enum(['document', 'notice', 'evidence']),
+    translationKey: z.enum(['document', 'notice', 'counterGuide', 'evidence']),
     published: z.coerce.date(),
     updated: z.coerce.date(),
     author: z.literal('Nguyen Linh Protector LLC'),
