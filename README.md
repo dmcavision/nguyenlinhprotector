@@ -71,7 +71,7 @@ Production HTML and CSS are minified. Astro emits hashed CSS under `/_astro/`, s
 
 ## Contact form and Resend
 
-The form is available on both contact routes and sends the same structured inquiry to `CONTACT_TO_EMAIL`. The Function sends a separate acknowledgment to the visitor after the internal message is accepted. It validates field lengths, email and URL formats, accepted option values, consent, origin, request size, a honeypot, and a best-effort per-instance rate limit. The form does not accept attachments.
+The form is available on both contact routes and sends the same structured inquiry to `CONTACT_TO_EMAIL`. The Function sends a separate acknowledgment to the visitor after the internal message is accepted. It validates field lengths, email and URL formats, accepted option values, consent, origin, request size, a honeypot, and a best-effort per-instance rate limit. Validation, rate-limit, network, configuration, and delivery failures produce localized user-facing messages. The form does not accept attachments.
 
 Copy `.env.example` to a local untracked environment file or configure these values directly in Vercel:
 

@@ -22,6 +22,7 @@ const f = contactFormCopy[locale];
     data-sending={f.sending}
     data-success={f.success}
     data-error={f.error}
+    data-errors={JSON.stringify(f.errors)}
   >
     <input type="hidden" name="locale" value={locale} />
     <div class="form-honeypot" aria-hidden="true">
@@ -166,19 +167,30 @@ const f = contactFormCopy[locale];
       label.textContent = form.dataset.sending;
       status.textContent = '';
       status.className = 'form-status';
+      let errorMessage = form.dataset.error;
+      let receivedResponse = false;
       try {
         const response = await fetch(form.action, {
           method: 'POST',
           body: new FormData(form),
           headers: { Accept: 'application/json' },
         });
+        receivedResponse = true;
         const result = await response.json();
-        if (!response.ok || !result.ok) throw new Error('Submission failed');
+        if (!response.ok || !result.ok) {
+          const errors = JSON.parse(form.dataset.errors || '{}');
+          errorMessage = errors[result.error] || form.dataset.error;
+          throw new Error('Submission failed');
+        }
         form.reset();
         status.textContent = form.dataset.success;
         status.classList.add('is-success');
       } catch {
-        status.textContent = form.dataset.error;
+        if (!receivedResponse) {
+          const errors = JSON.parse(form.dataset.errors || '{}');
+          errorMessage = errors.network || form.dataset.error;
+        }
+        status.textContent = errorMessage;
         status.classList.add('is-error');
       } finally {
         button.disabled = false;

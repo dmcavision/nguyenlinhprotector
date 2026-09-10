@@ -171,14 +171,16 @@ function allowedOrigin(request: Request): boolean {
   if (!origin) return true;
   try {
     const hostname = new URL(origin).hostname;
-    const previewHostname = process.env.VERCEL_URL;
-    return (
-      hostname === 'nguyenlinhprotector.net' ||
-      hostname === 'www.nguyenlinhprotector.net' ||
-      hostname === 'localhost' ||
-      hostname === '127.0.0.1' ||
-      (previewHostname !== undefined && hostname === previewHostname)
-    );
+    const allowedHosts = new Set([
+      'nguyenlinhprotector.net',
+      'www.nguyenlinhprotector.net',
+      'localhost',
+      '127.0.0.1',
+      process.env.VERCEL_URL,
+      process.env.VERCEL_BRANCH_URL,
+      process.env.VERCEL_PROJECT_PRODUCTION_URL,
+    ]);
+    return allowedHosts.has(hostname);
   } catch {
     return false;
   }

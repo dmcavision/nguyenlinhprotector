@@ -23,6 +23,7 @@ type ContactFormCopy = {
   sending: string;
   success: string;
   error: string;
+  errors: Record<string, string>;
   privacy: string;
   required: string;
   noScript: string;
@@ -78,6 +79,31 @@ export const contactFormCopy: Record<Locale, ContactFormCopy> = {
       'Your inquiry has been sent. We will review the information and respond using the email provided.',
     error:
       'We could not send your inquiry. Please check the fields and try again, or contact us by email.',
+    errors: {
+      name: 'Please review the full name field.',
+      email: 'Please enter a valid email address.',
+      organization: 'Please review the organization field.',
+      relationship: 'Please select your relationship to the matter.',
+      issueType: 'Please select the type of inquiry.',
+      platform: 'Please identify the platform involved.',
+      urls: 'Enter one complete URL per line, beginning with https:// or http://.',
+      message: 'Please provide an explanation of at least 20 characters.',
+      consent: 'Please confirm the accuracy and data-handling statement.',
+      invalid_origin:
+        'This page cannot submit from its current address. Refresh the production website and try again.',
+      rate_limited:
+        'Too many inquiries were submitted from this connection. Please wait 15 minutes and try again.',
+      payload_too_large:
+        'The inquiry contains too much text. Shorten it and try again.',
+      service_unavailable:
+        'The email service is temporarily unavailable. Please contact us directly by email.',
+      delivery_failed:
+        'The email provider could not accept this inquiry. Please contact us directly by email.',
+      invalid_form:
+        'The submitted form could not be read. Refresh the page and try again.',
+      network:
+        'The network request failed. Check your connection and try again.',
+    },
     privacy: 'Your information is handled as described in our Privacy Policy.',
     required: 'Required fields are marked with an asterisk.',
     noScript:
@@ -132,6 +158,30 @@ export const contactFormCopy: Record<Locale, ContactFormCopy> = {
       'Yêu cầu của bạn đã được gửi. Chúng tôi sẽ xem xét và phản hồi qua email bạn cung cấp.',
     error:
       'Không thể gửi yêu cầu. Vui lòng kiểm tra các trường và thử lại hoặc liên hệ trực tiếp qua email.',
+    errors: {
+      name: 'Vui lòng kiểm tra lại trường họ và tên.',
+      email: 'Vui lòng nhập địa chỉ email hợp lệ.',
+      organization: 'Vui lòng kiểm tra lại trường tổ chức.',
+      relationship: 'Vui lòng chọn vai trò của bạn trong vụ việc.',
+      issueType: 'Vui lòng chọn loại yêu cầu.',
+      platform: 'Vui lòng cho biết nền tảng liên quan.',
+      urls: 'Nhập mỗi dòng một URL đầy đủ, bắt đầu bằng https:// hoặc http://.',
+      message: 'Vui lòng nhập nội dung mô tả có ít nhất 20 ký tự.',
+      consent: 'Vui lòng xác nhận tuyên bố về tính chính xác và xử lý dữ liệu.',
+      invalid_origin:
+        'Không thể gửi từ địa chỉ trang hiện tại. Hãy tải lại website chính thức và thử lại.',
+      rate_limited:
+        'Đã có quá nhiều yêu cầu từ kết nối này. Vui lòng chờ 15 phút rồi thử lại.',
+      payload_too_large:
+        'Nội dung yêu cầu quá dài. Vui lòng rút gọn và thử lại.',
+      service_unavailable:
+        'Dịch vụ email đang tạm thời không khả dụng. Vui lòng liên hệ trực tiếp qua email.',
+      delivery_failed:
+        'Nhà cung cấp email không thể tiếp nhận yêu cầu. Vui lòng liên hệ trực tiếp qua email.',
+      invalid_form:
+        'Không thể đọc dữ liệu biểu mẫu. Hãy tải lại trang và thử lại.',
+      network: 'Kết nối mạng bị lỗi. Vui lòng kiểm tra kết nối và thử lại.',
+    },
     privacy: 'Thông tin được xử lý theo Chính sách bảo mật của chúng tôi.',
     required: 'Các trường có dấu sao là bắt buộc.',
     noScript:
