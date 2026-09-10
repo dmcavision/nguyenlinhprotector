@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">Nguyen Linh Protector N-Shield mark for dark backgrounds</title>
+  <desc id="desc">A white and blue geometric N formed within a protective hexagonal shield</desc>
+  <path fill="#FFFFFF" d="M242 42 56 150v212l186 108V368l-98-56V200l98 56Z"/>
+  <path fill="#2864FF" d="m270 42 186 108v212L270 470V368l98-56V200l-98-56Z"/>
+  <path fill="#2864FF" d="m144 186 224 128v96L144 282Z"/>
+</svg>

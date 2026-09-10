@@ -1,0 +1,36 @@
+{
+  "name": "nguyen-linh-protector",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check",
+    "validate": "node scripts/validate.mjs",
+    "test:browser": "node scripts/browser-check.mjs",
+    "test:contact": "node scripts/test-contact.mjs",
+    "test:lighthouse": "node scripts/lighthouse.mjs",
+    "format": "prettier --write src scripts astro.config.mjs"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "^3.7.4",
+    "astro": "^7.3.2",
+    "resend": "^6.27.0"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.10",
+    "@axe-core/playwright": "^4.13.0",
+    "@playwright/test": "^1.63.0",
+    "cheerio": "^1.2.0",
+    "lighthouse": "^13.4.1",
+    "prettier": "^3.9.6",
+    "prettier-plugin-astro": "^1.0.0",
+    "sharp": "^0.35.4",
+    "typescript": "~6.0.3"
+  },
+  "engines": {
+    "node": "22.x"
+  }
+}

@@ -1,0 +1,112 @@
+---
+import { pairs, serviceKeys, type Locale, type PageKey } from '../i18n/routes';
+import { copy } from '../i18n/copy';
+import LanguageSwitcher from './LanguageSwitcher.astro';
+interface Props {
+  locale: Locale;
+  pageKey: PageKey;
+}
+const { locale, pageKey } = Astro.props;
+const t = copy[locale];
+const links = [
+  ...(['process', 'about', 'insights', 'contact'] as const).map((key, i) => ({
+    href: pairs[key][locale],
+    label: t.nav[i + 1],
+    key,
+  })),
+];
+---
+
+<a class="skip-link" href="#main">
+  {t.skip}
+</a>
+<header class="header">
+  <div class="container header-inner">
+    <a class="identity" href={pairs.home[locale]}>
+      <span class="logo-box">
+        <img
+          src="/brand/nguyen-linh-protector-mark-dark.svg"
+          alt=""
+          width="42"
+          height="42"
+        />
+      </span>
+      <span class="wordmark">
+        NGUYEN LINH <span>PROTECTOR</span>
+      </span>
+    </a>
+    <nav
+      class="desktop-nav"
+      aria-label={locale === 'en' ? 'Main navigation' : 'Điều hướng chính'}
+    >
+      <details class="services-menu">
+        <summary
+          class:list={{
+            'current-service': serviceKeys.some((key) => key === pageKey),
+          }}
+        >
+          {t.nav[0]} <span aria-hidden="true">⌄</span>
+        </summary>
+        <div class="services-dropdown">
+          {serviceKeys.map((key) => (
+            <a
+              href={pairs[key][locale]}
+              aria-current={pageKey === key ? 'page' : undefined}
+            >
+              {t.pages[key].title}
+            </a>
+          ))}
+        </div>
+      </details>
+      {links.map((link) => (
+        <a
+          href={link.href}
+          aria-current={pageKey === link.key ? 'page' : undefined}
+        >
+          {link.label}
+        </a>
+      ))}
+    </nav>
+    <div class="header-actions">
+      <a
+        class="header-login"
+        href={pairs.platformLogins[locale]}
+        aria-current={pageKey === 'platformLogins' ? 'page' : undefined}
+      >
+        <span aria-hidden="true" class="login-symbol">
+          ↗
+        </span>
+        Login
+      </a>
+      <LanguageSwitcher locale={locale} pageKey={pageKey} />
+      <details class="mobile-nav">
+        <summary>{t.menu}</summary>
+        <nav
+          aria-label={
+            locale === 'en' ? 'Mobile navigation' : 'Điều hướng di động'
+          }
+        >
+          <div class="mobile-services">
+            <p class="mobile-group-label">{t.nav[0]}</p>
+            {serviceKeys.map((key) => (
+              <a
+                href={pairs[key][locale]}
+                aria-current={pageKey === key ? 'page' : undefined}
+              >
+                {t.pages[key].title}
+              </a>
+            ))}
+          </div>
+          {links.map((link) => (
+            <a
+              href={link.href}
+              aria-current={pageKey === link.key ? 'page' : undefined}
+            >
+              {link.label}
+            </a>
+          ))}
+        </nav>
+      </details>
+    </div>
+  </div>
+</header>

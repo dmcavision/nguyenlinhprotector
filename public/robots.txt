@@ -1,0 +1,3 @@
+﻿User-agent: *
+Allow: /
+Sitemap: https://nguyenlinhprotector.net/sitemap-index.xml

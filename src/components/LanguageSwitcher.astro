@@ -1,0 +1,44 @@
+﻿---
+import { pairs, type Locale, type PageKey } from '../i18n/routes';
+interface Props {
+  locale: Locale;
+  pageKey: PageKey;
+}
+const { locale, pageKey } = Astro.props;
+const languages = [
+  { code: 'en', label: 'EN', name: 'English' },
+  { code: 'vi', label: 'VI', name: 'Tiếng Việt' },
+] as const;
+---
+
+<nav class="language" aria-label={locale === 'en' ? 'Language' : 'Ngôn ngữ'}>
+  {languages.map(({ code, label, name }, index) => (
+    <>
+      {index > 0 && (
+        <span class="language-separator" aria-hidden="true">
+          |
+        </span>
+      )}
+      {code === locale ? (
+        <span
+          class="language-option is-current"
+          lang={code}
+          aria-current="true"
+          aria-label={`${label} — ${name}`}
+        >
+          {label}
+        </span>
+      ) : (
+        <a
+          class="language-option"
+          href={pairs[pageKey][code]}
+          lang={code}
+          hreflang={code}
+          aria-label={`${label} — ${name}`}
+        >
+          {label}
+        </a>
+      )}
+    </>
+  ))}
+</nav>

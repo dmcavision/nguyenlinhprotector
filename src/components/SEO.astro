@@ -1,0 +1,154 @@
+---
+import {
+  site,
+  pairs,
+  business,
+  serviceKeys,
+  type Locale,
+  type PageKey,
+} from '../i18n/routes';
+import StructuredData from './StructuredData.astro';
+interface Props {
+  locale: Locale;
+  pageKey: PageKey;
+  title: string;
+  description: string;
+  article?: { published: Date; updated: Date };
+  noindex?: boolean;
+}
+const {
+  locale,
+  pageKey,
+  title,
+  description,
+  article,
+  noindex = false,
+} = Astro.props;
+const canonical = noindex ? site + '/404.html' : site + pairs[pageKey][locale];
+const fullTitle = title + ' | Nguyen Linh Protector';
+const organization = {
+  '@type': 'Organization',
+  '@id': site + '/#organization',
+  name: business.name,
+  alternateName: business.brand,
+  url: site,
+  email: business.email,
+  telephone: business.phone,
+  description: 'IP Enforcement & Brand Protection',
+  identifier: business.id,
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: '30 N Gould St, Ste N',
+    addressLocality: 'Sheridan',
+    addressRegion: 'WY',
+    postalCode: '82801',
+    addressCountry: 'US',
+  },
+};
+const graph: Record<string, unknown>[] = [
+  organization,
+  {
+    '@type': 'WebSite',
+    '@id': site + '/#website',
+    url: site,
+    name: business.brand,
+    inLanguage: ['en', 'vi'],
+    publisher: { '@id': site + '/#organization' },
+  },
+  {
+    '@type': 'WebPage',
+    '@id': canonical + '#webpage',
+    url: canonical,
+    name: title,
+    description,
+    inLanguage: locale,
+    isPartOf: { '@id': site + '/#website' },
+  },
+];
+if (serviceKeys.some((key) => key === pageKey))
+  graph.push({
+    '@type': 'Service',
+    name: title,
+    description,
+    url: canonical,
+    provider: { '@id': site + '/#organization' },
+  });
+if (pageKey !== 'home' && !noindex) {
+  const crumbs = [
+    {
+      name: locale === 'en' ? 'Home' : 'Trang chủ',
+      item: site + pairs.home[locale],
+    },
+  ];
+  if (article)
+    crumbs.push({
+      name:
+        locale === 'en'
+          ? 'Insights & Practical Guides'
+          : 'Kiến thức & Hướng dẫn thực hành',
+      item: site + pairs.insights[locale],
+    });
+  crumbs.push({ name: title, item: canonical });
+  graph.push({
+    '@type': 'BreadcrumbList',
+    itemListElement: crumbs.map((c, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      ...c,
+    })),
+  });
+}
+if (article)
+  graph.push({
+    '@type': 'Article',
+    headline: title,
+    description,
+    datePublished: article.published.toISOString(),
+    dateModified: article.updated.toISOString(),
+    author: { '@id': site + '/#organization' },
+    publisher: { '@id': site + '/#organization' },
+    inLanguage: locale,
+    mainEntityOfPage: { '@id': canonical + '#webpage' },
+    url: canonical,
+  });
+---
+
+<title>{fullTitle}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonical} />
+{noindex ? (
+  <meta name="robots" content="noindex,follow" />
+) : (
+  <>
+    {(['en', 'vi'] as const).map((lang) => (
+      <link
+        rel="alternate"
+        hreflang={lang}
+        href={site + pairs[pageKey][lang]}
+      />
+    ))}
+    <link
+      rel="alternate"
+      hreflang="x-default"
+      href={site + pairs[pageKey].en}
+    />
+  </>
+)}
+<meta property="og:type" content={article ? 'article' : 'website'} />
+<meta property="og:site_name" content={business.brand} />
+<meta property="og:title" content={fullTitle} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonical} />
+<meta property="og:locale" content={locale === 'en' ? 'en_US' : 'vi_VN'} />
+<meta
+  property="og:locale:alternate"
+  content={locale === 'en' ? 'vi_VN' : 'en_US'}
+/>
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content={fullTitle} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:url" content={canonical} />
+<link rel="icon" href="/brand/favicon.svg" type="image/svg+xml" />
+<link rel="apple-touch-icon" href="/brand/apple-touch-icon.png" />
+<meta name="theme-color" content="#071A2B" />
+<StructuredData data={{ '@context': 'https://schema.org', '@graph': graph }} />

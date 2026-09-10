@@ -1,0 +1,51 @@
+﻿---
+import { discovery } from '../i18n/discovery';
+import { copy } from '../i18n/copy';
+import { pairs, type Locale } from '../i18n/routes';
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const d = discovery[locale];
+---
+
+<section class="issue-section" aria-labelledby="issue-heading">
+  <div class="container section">
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow blue">{d.eyebrow}</p>
+        <h2 id="issue-heading">{d.heading}</h2>
+      </div>
+      <p>{d.intro}</p>
+    </div>
+    <div class="issue-grid">
+      {d.issues.map((issue, i) => (
+        <article class="issue-card">
+          <span class="step-number" aria-hidden="true">
+            0{i + 1}
+          </span>
+          <h3>{issue.title}</h3>
+          <p>{issue.text}</p>
+          <a class="text-link" href={pairs[issue.service][locale]}>
+            {copy[locale].pages[issue.service].title}
+            <span aria-hidden="true">↗</span>
+          </a>
+        </article>
+      ))}
+    </div>
+    <div class="issue-followup">
+      <p>
+        {d.dmcaText}{' '}
+        <a href={pairs.dmca[locale]}>
+          {d.dmcaLink} <span aria-hidden="true">↗</span>
+        </a>
+      </p>
+      <p>
+        {d.unsure}{' '}
+        <a href={pairs.contact[locale]}>
+          {d.contact} <span aria-hidden="true">↗</span>
+        </a>
+      </p>
+    </div>
+  </div>
+</section>

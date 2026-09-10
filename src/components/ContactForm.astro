@@ -1,0 +1,190 @@
+---
+import { contactFormCopy } from '../i18n/contact-form';
+import { pairs, type Locale } from '../i18n/routes';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const f = contactFormCopy[locale];
+---
+
+<section class="contact-form-panel" aria-labelledby="contact-form-heading">
+  <p class="eyebrow blue">{f.eyebrow}</p>
+  <h2 id="contact-form-heading">{f.heading}</h2>
+  <p class="form-intro">{f.intro}</p>
+  <p class="required-note">{f.required}</p>
+  <form
+    class="contact-form"
+    action="/api/contact"
+    method="post"
+    data-sending={f.sending}
+    data-success={f.success}
+    data-error={f.error}
+  >
+    <input type="hidden" name="locale" value={locale} />
+    <div class="form-honeypot" aria-hidden="true">
+      <label for={`company-website-${locale}`}>Company website</label>
+      <input
+        id={`company-website-${locale}`}
+        name="company_website"
+        type="text"
+        tabindex="-1"
+        autocomplete="off"
+      />
+    </div>
+    <div class="form-grid">
+      <label>
+        <span>
+          {f.fields.name.label} <b aria-hidden="true">*</b>
+        </span>
+        <input
+          name="name"
+          type="text"
+          autocomplete="name"
+          minlength="2"
+          maxlength="100"
+          required
+        />
+      </label>
+      <label>
+        <span>
+          {f.fields.email.label} <b aria-hidden="true">*</b>
+        </span>
+        <input
+          name="email"
+          type="email"
+          autocomplete="email"
+          maxlength="254"
+          required
+        />
+      </label>
+      <label>
+        <span>
+          {f.fields.organization.label}{' '}
+          <small>{f.fields.organization.hint}</small>
+        </span>
+        <input
+          name="organization"
+          type="text"
+          autocomplete="organization"
+          maxlength="120"
+        />
+      </label>
+      <label>
+        <span>
+          {f.fields.relationship.label} <b aria-hidden="true">*</b>
+        </span>
+        <select name="relationship" required>
+          <option value="">{f.choose}</option>
+          {f.relationships.map(([value, label]) => (
+            <option value={value}>{label}</option>
+          ))}
+        </select>
+      </label>
+      <label>
+        <span>
+          {f.fields.issueType.label} <b aria-hidden="true">*</b>
+        </span>
+        <select name="issueType" required>
+          <option value="">{f.choose}</option>
+          {f.issueTypes.map(([value, label]) => (
+            <option value={value}>{label}</option>
+          ))}
+        </select>
+      </label>
+      <label>
+        <span>
+          {f.fields.platform.label} <b aria-hidden="true">*</b>
+        </span>
+        <input
+          name="platform"
+          type="text"
+          maxlength="120"
+          placeholder={f.fields.platform.placeholder}
+          required
+        />
+      </label>
+    </div>
+    <label>
+      <span>
+        {f.fields.urls.label} <b aria-hidden="true">*</b>{' '}
+        <small>{f.fields.urls.hint}</small>
+      </span>
+      <textarea
+        name="urls"
+        rows="4"
+        maxlength="2000"
+        inputmode="url"
+        required
+      ></textarea>
+    </label>
+    <label>
+      <span>
+        {f.fields.message.label} <b aria-hidden="true">*</b>
+      </span>
+      <textarea
+        name="message"
+        rows="7"
+        minlength="20"
+        maxlength="4000"
+        placeholder={f.fields.message.placeholder}
+        required
+      ></textarea>
+    </label>
+    <label class="consent-field">
+      <input name="consent" type="checkbox" value="yes" required />
+      <span>{f.consent}</span>
+    </label>
+    <div class="form-footer">
+      <button class="button form-submit" type="submit">
+        <span class="submit-label">{f.submit}</span>
+        <span aria-hidden="true">↗</span>
+      </button>
+      <p>
+        <a href={pairs.privacy[locale]}>{f.privacy}</a>
+      </p>
+    </div>
+    <p class="form-status" role="status" aria-live="polite" tabindex="-1"></p>
+    <noscript>
+      <p class="form-noscript">{f.noScript}</p>
+    </noscript>
+  </form>
+</section>
+
+<script is:inline>
+  document.querySelectorAll('.contact-form').forEach((form) => {
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      if (!form.reportValidity()) return;
+      const button = form.querySelector('.form-submit');
+      const label = form.querySelector('.submit-label');
+      const status = form.querySelector('.form-status');
+      const original = label.textContent;
+      button.disabled = true;
+      label.textContent = form.dataset.sending;
+      status.textContent = '';
+      status.className = 'form-status';
+      try {
+        const response = await fetch(form.action, {
+          method: 'POST',
+          body: new FormData(form),
+          headers: { Accept: 'application/json' },
+        });
+        const result = await response.json();
+        if (!response.ok || !result.ok) throw new Error('Submission failed');
+        form.reset();
+        status.textContent = form.dataset.success;
+        status.classList.add('is-success');
+      } catch {
+        status.textContent = form.dataset.error;
+        status.classList.add('is-error');
+      } finally {
+        button.disabled = false;
+        label.textContent = original;
+        status.focus();
+      }
+    });
+  });
+</script>

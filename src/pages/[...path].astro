@@ -1,0 +1,113 @@
+---
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import { mainKeys, pairs, type MainKey, type Locale } from '../i18n/routes';
+import ContentPage from '../components/ContentPage.astro';
+import Base from '../layouts/Base.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import InquiryCTA from '../components/InquiryCTA.astro';
+import { copy } from '../i18n/copy';
+export async function getStaticPaths() {
+  const pages = mainKeys.flatMap((pageKey) =>
+    (['en', 'vi'] as const).map((locale) => ({
+      params: { path: pairs[pageKey][locale].slice(1, -1) || undefined },
+      props: { pageKey, locale },
+    })),
+  );
+  const articles = (await getCollection('insights')).map((entry) => ({
+    params: {
+      path: pairs[entry.data.translationKey][entry.data.locale].slice(1, -1),
+    },
+    props: { entry, locale: entry.data.locale },
+  }));
+  return [...pages, ...articles];
+}
+interface Props {
+  pageKey?: MainKey;
+  locale: Locale;
+  entry?: CollectionEntry<'insights'>;
+}
+const { pageKey, locale, entry } = Astro.props;
+const t = copy[locale];
+const rendered = entry ? await render(entry) : undefined;
+const Content = rendered?.Content;
+const minutes = entry
+  ? Math.max(
+      1,
+      Math.ceil(
+        (entry.body || '').split(/\s+/).length / (locale === 'vi' ? 250 : 200),
+      ),
+    )
+  : 0;
+const date = (d: Date) =>
+  new Intl.DateTimeFormat(locale === 'en' ? 'en-US' : 'vi-VN', {
+    dateStyle: 'long',
+    timeZone: 'UTC',
+  }).format(d);
+---
+
+{pageKey && <ContentPage locale={locale} pageKey={pageKey} />}
+{entry && Content && (
+  <Base
+    locale={locale}
+    pageKey={entry.data.translationKey}
+    title={entry.data.title}
+    description={entry.data.description}
+    article={{ published: entry.data.published, updated: entry.data.updated }}
+  >
+    <section class="page-hero article-hero">
+      <div class="container">
+        <Breadcrumbs locale={locale} title={entry.data.title} article />
+        <p class="eyebrow">
+          {locale === 'en'
+            ? 'Insights / Practical guide'
+            : 'Kiến thức / Hướng dẫn thực hành'}
+        </p>
+        <h1>{entry.data.title}</h1>
+        <p class="lead">{entry.data.description}</p>
+        <div class="article-meta">
+          <span>{entry.data.author}</span>
+          <span>
+            {minutes} {locale === 'en' ? 'min read' : 'phút đọc'}
+          </span>
+          <span>
+            {locale === 'en' ? 'Published' : 'Ngày đăng'}:{' '}
+            <time datetime={entry.data.published.toISOString()}>
+              {date(entry.data.published)}
+            </time>
+          </span>
+          <span>
+            {locale === 'en' ? 'Updated' : 'Cập nhật'}:{' '}
+            <time datetime={entry.data.updated.toISOString()}>
+              {date(entry.data.updated)}
+            </time>
+          </span>
+        </div>
+      </div>
+    </section>
+    <div class="container content-layout">
+      <article class="prose article-body">
+        <Content />
+        <p class="editorial-note">{t.disclaimer}</p>
+      </article>
+      <aside class="sidebar">
+        <h2>{t.related}</h2>
+        {entry.data.related.map((key) => (
+          <a class="aside-link" href={pairs[key][locale]}>
+            {t.pages[key].title} ↗
+          </a>
+        ))}
+        <h2>{locale === 'en' ? 'In this guide' : 'Trong hướng dẫn'}</h2>
+        <nav aria-label={locale === 'en' ? 'Article sections' : 'Mục bài viết'}>
+          {rendered?.headings
+            .filter((h) => h.depth === 2)
+            .map((h) => (
+              <a class="aside-link" href={`#${h.slug}`}>
+                {h.text}
+              </a>
+            ))}
+        </nav>
+      </aside>
+    </div>
+    <InquiryCTA locale={locale} />
+  </Base>
+)}

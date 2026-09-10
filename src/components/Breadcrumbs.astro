@@ -1,0 +1,28 @@
+---
+import { pairs, type Locale } from '../i18n/routes';
+import { copy } from '../i18n/copy';
+interface Props {
+  locale: Locale;
+  title: string;
+  article?: boolean;
+}
+const { locale, title, article = false } = Astro.props;
+const t = copy[locale];
+---
+
+<nav
+  class="breadcrumbs"
+  aria-label={locale === 'en' ? 'Breadcrumbs' : 'Đường dẫn'}
+>
+  <ol>
+    <li>
+      <a href={pairs.home[locale]}>{t.home}</a>
+    </li>
+    {article && (
+      <li>
+        <a href={pairs.insights[locale]}>{t.pages.insights.title}</a>
+      </li>
+    )}
+    <li aria-current="page">{title}</li>
+  </ol>
+</nav>

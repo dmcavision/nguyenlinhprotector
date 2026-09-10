@@ -1,0 +1,48 @@
+---
+import { pairs, serviceKeys, type Locale } from '../i18n/routes';
+import { copy } from '../i18n/copy';
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const t = copy[locale];
+const summaries =
+  locale === 'en'
+    ? [
+        'Document unauthorized use of your creative work and prepare clear, evidence-backed reports.',
+        'Organize notice information and submit through available copyright reporting channels.',
+        'Review removal notices and prepare counter-notification information when content may have been removed by mistake.',
+        'Address trademark misuse, suspected counterfeit promotion, and online impersonation.',
+      ]
+    : [
+        'Ghi nhận việc sử dụng trái phép tác phẩm và chuẩn bị báo cáo với bằng chứng rõ ràng.',
+        'Tổ chức thông tin thông báo và gửi qua kênh báo cáo bản quyền hiện có.',
+        'Rà soát yêu cầu gỡ bỏ và chuẩn bị thông tin phản đối khi nội dung có thể bị gỡ do nhầm lẫn.',
+        'Hỗ trợ báo cáo lạm dụng nhãn hiệu, quảng bá hàng nghi giả và mạo danh trực tuyến.',
+      ];
+---
+
+<div class="service-grid">
+  {serviceKeys.map((key, i) => (
+    <article class="service-card">
+      <div class="card-top">
+        <span class="service-symbol" aria-hidden="true">
+          {['©', '↓', '↺', '◇'][i]}
+        </span>
+        <span class="mono">0{i + 1}</span>
+      </div>
+      <h3>
+        <a href={pairs[key][locale]}>{t.pages[key].title}</a>
+      </h3>
+      <p>{summaries[i]}</p>
+      <a
+        class="text-link"
+        href={pairs[key][locale]}
+        aria-label={`${t.learn}: ${t.pages[key].title}`}
+      >
+        {t.learn}
+        <span aria-hidden="true">↗</span>
+      </a>
+    </article>
+  ))}
+</div>

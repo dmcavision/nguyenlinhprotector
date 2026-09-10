@@ -1,0 +1,23 @@
+---
+import { copy } from '../i18n/copy';
+import { pairs, type Locale } from '../i18n/routes';
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const t = copy[locale];
+---
+
+<section class="inquiry">
+  <div class="container inquiry-inner">
+    <div>
+      <p class="eyebrow">{t.nav[4]}</p>
+      <h2>{t.inquiryHeading}</h2>
+      <p>{t.inquiryText}</p>
+    </div>
+    <a class="button" href={pairs.contact[locale]}>
+      {t.cta}
+      <span aria-hidden="true">↗</span>
+    </a>
+  </div>
+</section>

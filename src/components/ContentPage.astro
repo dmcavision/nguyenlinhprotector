@@ -1,0 +1,501 @@
+---
+import Base from '../layouts/Base.astro';
+import IssueFinder from './IssueFinder.astro';
+import InsightCards from './InsightCards.astro';
+import ContactForm from './ContactForm.astro';
+import { discovery } from '../i18n/discovery';
+import { platformCopy } from '../i18n/platforms';
+import Breadcrumbs from './Breadcrumbs.astro';
+import ServiceCards from './ServiceCards.astro';
+import ProcessSteps from './ProcessSteps.astro';
+import InquiryCTA from './InquiryCTA.astro';
+import { copy } from '../i18n/copy';
+import { serviceContent, policies } from '../i18n/content';
+import {
+  pairs,
+  business,
+  serviceKeys,
+  type Locale,
+  type MainKey,
+} from '../i18n/routes';
+import { getCollection } from 'astro:content';
+interface Props {
+  locale: Locale;
+  pageKey: MainKey;
+}
+const { locale, pageKey } = Astro.props;
+const t = copy[locale];
+const page = t.pages[pageKey];
+const en = locale === 'en';
+const serviceKey = serviceKeys.find((key) => key === pageKey);
+const isService = Boolean(serviceKey);
+const articles =
+  pageKey === 'insights' || pageKey === 'home'
+    ? await getCollection('insights', ({ data }) => data.locale === locale)
+    : [];
+const sections = serviceKey
+  ? serviceContent[locale][serviceKey]
+  : pageKey === 'privacy' || pageKey === 'terms'
+    ? policies[locale][pageKey]
+    : [];
+---
+
+<Base
+  locale={locale}
+  pageKey={pageKey}
+  title={page.title}
+  description={page.description}
+>
+  {pageKey === 'home' ? (
+    <>
+      <section class="hero">
+        <div class="container hero-grid">
+          <div class="hero-copy">
+            <p class="eyebrow">
+              <span class="status-dot" />
+              {t.eyebrow}
+            </p>
+            <h1>
+              {en ? (
+                <>
+                  Online Copyright
+                  <br />
+                  Enforcement <span class="muted-amp">&amp;</span>
+                  <br />
+                  <span class="hero-highlight">Brand Protection</span>
+                </>
+              ) : (
+                page.title
+              )}
+            </h1>
+            <p class="hero-intro">{page.intro}</p>
+            <div class="hero-actions">
+              <a class="button" href={pairs.contact[locale]}>
+                {t.cta}
+                <span aria-hidden="true">↗</span>
+              </a>
+              <a class="secondary-link" href="#services">
+                {t.explore}
+                <span aria-hidden="true">↓</span>
+              </a>
+            </div>
+          </div>
+          <div
+            class="evidence-visual"
+            aria-label={
+              en
+                ? 'The foundations of an enforcement report'
+                : 'Các yếu tố nền tảng của hồ sơ báo cáo'
+            }
+          >
+            <div class="visual-top">
+              <span class="mono">
+                {en ? 'ENFORCEMENT FRAMEWORK' : 'CƠ SỞ HỒ SƠ'}
+              </span>
+              <span class="corner-cross" aria-hidden="true">
+                +
+              </span>
+            </div>
+            <div class="shield-stage">
+              <div class="orbit orbit-one" />
+              <div class="orbit orbit-two" />
+              <div class="shield-tile">
+                <img
+                  src="/brand/nguyen-linh-protector-mark.svg"
+                  alt="Nguyen Linh Protector N-Shield"
+                  width="130"
+                  height="130"
+                />
+              </div>
+              <span class="axis axis-x" />
+              <span class="axis axis-y" />
+            </div>
+            <div class="evidence-caption">
+              <span class="status-dot" />
+              {en
+                ? 'A clear record. A considered response.'
+                : 'Hồ sơ rõ ràng. Xử lý cẩn trọng.'}
+            </div>
+            <div class="visual-bottom">
+              {(en
+                ? ['RIGHTS', 'EVIDENCE', 'REPORTING']
+                : ['QUYỀN', 'BẰNG CHỨNG', 'BÁO CÁO']
+              ).map((s, i) => (
+                <span>
+                  <small>0{i + 1}</small>
+                  {s}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+        <div class="hero-foot container">
+          <span>
+            {en
+              ? 'FOR CREATORS, RIGHTS HOLDERS & BRANDS'
+              : 'DÀNH CHO NHÀ SÁNG TẠO, CHỦ SỞ HỮU QUYỀN & THƯƠNG HIỆU'}
+          </span>
+          <span>
+            {en ? 'Document. Prepare. Report.' : 'Ghi nhận. Chuẩn bị. Báo cáo.'}
+          </span>
+        </div>
+      </section>
+      <IssueFinder locale={locale} />
+      <section id="services" class="section container">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow blue">01 / {t.services}</p>
+            <h2>{t.serviceHeading}</h2>
+          </div>
+          <p>{t.serviceIntro}</p>
+        </div>
+        <ServiceCards locale={locale} />
+      </section>
+      <section class="process-section">
+        <div class="container section">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow blue">02 / {t.nav[1]}</p>
+              <h2>{t.processHeading}</h2>
+            </div>
+            <p>{t.processIntro}</p>
+          </div>
+          <ProcessSteps locale={locale} />
+          <a class="text-link" href={pairs.process[locale]}>
+            {en ? 'Understand the process' : 'Tìm hiểu quy trình'}
+            <span aria-hidden="true">↗</span>
+          </a>
+        </div>
+      </section>
+      <section class="section container">
+        <p class="eyebrow blue">
+          03 / {en ? 'Operating principles' : 'Nguyên tắc hoạt động'}
+        </p>
+        <h2>{t.principlesHeading}</h2>
+        <div class="principles-grid">
+          {t.principles.map(([title, text]) => (
+            <article>
+              <h3>{title}</h3>
+              <p>{text}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+      <section
+        class="section container home-guides"
+        aria-labelledby="guides-heading"
+      >
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow blue">{discovery[locale].guidesEyebrow}</p>
+            <h2 id="guides-heading">{discovery[locale].guidesHeading}</h2>
+          </div>
+          <p>{discovery[locale].guidesIntro}</p>
+        </div>
+        <InsightCards locale={locale} articles={articles} headingLevel="h3" />
+        <a class="text-link all-guides" href={pairs.insights[locale]}>
+          {discovery[locale].allGuides} <span aria-hidden="true">↗</span>
+        </a>
+      </section>
+      <InquiryCTA locale={locale} />
+    </>
+  ) : (
+    <>
+      <section class="page-hero">
+        <div class="container">
+          <Breadcrumbs locale={locale} title={page.title} />
+          <p class="eyebrow">{t.eyebrow}</p>
+          <h1>{page.title}</h1>
+          <p class="lead">{page.intro}</p>
+        </div>
+      </section>
+      {sections.length > 0 && (
+        <div class="container content-layout">
+          <article class="prose">
+            {sections.map((section) => (
+              <section>
+                <h2>{section.heading}</h2>
+                <p>{section.text}</p>
+                {section.items && (
+                  <ul>
+                    {section.items.map((item) => (
+                      <li>{item}</li>
+                    ))}
+                  </ul>
+                )}
+                {section.source && (
+                  <p>
+                    <a href={section.source.href}>
+                      {section.source.label} <span aria-hidden="true">↗</span>
+                    </a>
+                  </p>
+                )}
+              </section>
+            ))}
+          </article>
+          <aside class="sidebar">
+            <p class="eyebrow blue">
+              {isService ? t.nav[4] : en ? 'Questions' : 'Thắc mắc'}
+            </p>
+            <h2>
+              {isService
+                ? t.inquiryHeading
+                : en
+                  ? 'Speak with our team'
+                  : 'Liên hệ với chúng tôi'}
+            </h2>
+            <p>
+              {isService
+                ? t.inquiryText
+                : en
+                  ? 'For questions about these terms or your information, contact us by email.'
+                  : 'Gửi email nếu bạn có câu hỏi về điều khoản hoặc thông tin của mình.'}
+            </p>
+            <a
+              class="button"
+              href={
+                isService ? pairs.contact[locale] : `mailto:${business.email}`
+              }
+            >
+              {isService ? t.cta : t.emailUs}
+              <span aria-hidden="true">↗</span>
+            </a>
+            {isService && (
+              <>
+                <h3>{t.related}</h3>
+                {serviceKeys
+                  .filter((key) => key !== pageKey)
+                  .map((key) => (
+                    <a class="aside-link" href={pairs[key][locale]}>
+                      {t.pages[key].title} ↗
+                    </a>
+                  ))}
+                <a class="aside-link" href={pairs.insights[locale]}>
+                  {t.pages.insights.title} ↗
+                </a>
+              </>
+            )}
+          </aside>
+        </div>
+      )}
+      {pageKey === 'process' && (
+        <>
+          <section class="section container">
+            <h2>
+              {en
+                ? 'Six stages. One documented record.'
+                : 'Sáu bước. Một hồ sơ xuyên suốt.'}
+            </h2>
+            <ProcessSteps locale={locale} />
+          </section>
+          <section class="process-section">
+            <div class="container section two-column">
+              <div>
+                <h2>
+                  {en
+                    ? 'Before a report is submitted'
+                    : 'Trước khi gửi báo cáo'}
+                </h2>
+                <p>
+                  {en
+                    ? 'We clarify the scope and authorization, identify missing information, and ask you to confirm the facts and required statements. An initial inquiry does not authorize us to submit a report.'
+                    : 'Chúng tôi làm rõ phạm vi và thẩm quyền, xác định thông tin còn thiếu, đề nghị bạn xác nhận sự việc và các tuyên bố cần thiết. Yêu cầu ban đầu không tự động cho phép chúng tôi gửi báo cáo.'}
+                </p>
+              </div>
+              <div>
+                <h2>
+                  {en
+                    ? 'After the platform responds'
+                    : 'Sau khi nền tảng phản hồi'}
+                </h2>
+                <p>
+                  {en
+                    ? 'We distinguish acknowledgment from a decision, record requests for more evidence, and track the status of the specific URLs. A disputed claim or counter-notice may need qualified legal counsel. No fixed response time or outcome is promised.'
+                    : 'Chúng tôi phân biệt xác nhận tiếp nhận với quyết định, ghi nhận yêu cầu bổ sung và theo dõi tình trạng từng URL. Tranh chấp hoặc thông báo phản đối có thể cần luật sư. Không cam kết thời gian hay kết quả cụ thể.'}
+                </p>
+              </div>
+            </div>
+          </section>
+          <InquiryCTA locale={locale} />
+        </>
+      )}
+      {pageKey === 'about' && (
+        <>
+          <section class="container section two-column">
+            <div class="prose">
+              <h2>
+                {en
+                  ? 'Purposeful support for online rights'
+                  : 'Hỗ trợ có định hướng cho quyền trực tuyến'}
+              </h2>
+              <p>
+                {en
+                  ? 'Nguyen Linh Protector LLC provides informational and administrative enforcement support. Our focus connects copyright enforcement, DMCA notice and counter-claim support, and brand protection through a common discipline: clear evidence and responsible reporting.'
+                  : 'Nguyen Linh Protector LLC cung cấp hỗ trợ thông tin và hành chính về thực thi quyền. Chúng tôi kết nối hỗ trợ bản quyền, thông báo DMCA, phản đối yêu cầu gỡ bỏ và bảo vệ thương hiệu bằng một nguyên tắc chung: bằng chứng rõ ràng và báo cáo có trách nhiệm.'}
+              </p>
+              <p>
+                {en
+                  ? 'We assist with organizing rights records, documenting reported material, preparing notices, submitting through available channels, and tracking platform responses. We are not a law firm, and platforms make their own enforcement decisions.'
+                  : 'Chúng tôi hỗ trợ tổ chức hồ sơ quyền, ghi nhận nội dung, chuẩn bị thông báo, gửi qua kênh hiện có và theo dõi phản hồi. Chúng tôi không phải công ty luật; nền tảng tự quyết định việc xử lý.'}
+              </p>
+              <h2>{t.principlesHeading}</h2>
+              {t.principles.map(([title, text]) => (
+                <>
+                  <h3>{title}</h3>
+                  <p>{text}</p>
+                </>
+              ))}
+            </div>
+            <aside class="business-card">
+              <img
+                src="/brand/nguyen-linh-protector-mark.svg"
+                width="80"
+                height="80"
+                alt="Nguyen Linh Protector N-Shield"
+              />
+              <h2>Nguyen Linh Protector LLC</h2>
+              <p>IP Enforcement &amp; Brand Protection</p>
+              <dl>
+                <dt>Wyoming Original ID</dt>
+                <dd>{business.id}</dd>
+                <dt>{t.registered}</dt>
+                <dd>{business.address}</dd>
+              </dl>
+              <p>
+                {en
+                  ? 'The registered address is provided for corporate identification; it is not presented as a staffed customer service location. Please use email or telephone for inquiries.'
+                  : 'Địa chỉ đăng ký dùng để xác định doanh nghiệp, không phải địa điểm được giới thiệu có nhân viên chăm sóc khách hàng. Vui lòng liên hệ qua email hoặc điện thoại.'}
+              </p>
+            </aside>
+          </section>
+          <InquiryCTA locale={locale} />
+        </>
+      )}
+      {pageKey === 'insights' && (
+        <section class="section container">
+          <InsightCards locale={locale} articles={articles} />
+          <p class="editorial-note">
+            {en
+              ? 'These guides provide general educational information. Consult qualified legal counsel for jurisdiction-specific advice.'
+              : 'Các hướng dẫn cung cấp kiến thức tham khảo chung. Hãy tham khảo luật sư để được tư vấn theo khu vực pháp lý.'}
+          </p>
+        </section>
+      )}
+      {pageKey === 'contact' && (
+        <section class="section container contact-form-layout">
+          <ContactForm locale={locale} />
+          <aside class="contact-aside">
+            <div class="direct-contact">
+              <p class="eyebrow blue">
+                {en ? 'Direct contact' : 'Liên hệ trực tiếp'}
+              </p>
+              <h2>
+                {en
+                  ? 'Prefer email or telephone?'
+                  : 'Bạn muốn gửi email hoặc gọi điện?'}
+              </h2>
+              <p>
+                {en
+                  ? 'You can contact our team directly using either method below.'
+                  : 'Bạn có thể liên hệ trực tiếp với chúng tôi bằng một trong hai phương thức dưới đây.'}
+              </p>
+            </div>
+            <a class="contact-method" href={`mailto:${business.email}`}>
+              <span class="contact-label">{t.emailUs}</span>
+              <span class="contact-value">
+                {business.email} <span aria-hidden="true">↗</span>
+              </span>
+            </a>
+            <a class="contact-method" href={`tel:${business.phone}`}>
+              <span class="contact-label">{t.callUs}</span>
+              <span class="contact-value">
+                {business.displayPhone} <span aria-hidden="true">↗</span>
+              </span>
+            </a>
+            <div class="checklist compact-checklist">
+              <h2>{t.checklistHeading}</h2>
+              <ol>
+                {t.checklist.map((item) => (
+                  <li>{item}</li>
+                ))}
+              </ol>
+            </div>
+            <p class="sensitive-note">{t.sensitive}</p>
+            <p>
+              {en
+                ? 'We review the information to discuss suitability and scope. Do not assume a matter has been accepted until an engagement is agreed.'
+                : 'Chúng tôi xem xét thông tin để trao đổi về sự phù hợp và phạm vi. Không mặc định vụ việc đã được nhận khi chưa thống nhất dịch vụ.'}
+            </p>
+            <div class="registered-office">
+              <h2>{t.registered}</h2>
+              <p>{business.address}</p>
+              <p>
+                {en
+                  ? 'For correspondence identification only. Please contact us before arranging any delivery.'
+                  : 'Địa chỉ dùng để xác định doanh nghiệp trong thư từ. Vui lòng liên hệ trước khi sắp xếp gửi tài liệu.'}
+              </p>
+            </div>
+          </aside>
+        </section>
+      )}
+      {pageKey === 'platformLogins' && (
+        <>
+          <section
+            class="section container platform-section"
+            aria-labelledby="platform-heading"
+          >
+            <div class="section-heading platform-heading">
+              <div>
+                <p class="eyebrow blue">{platformCopy[locale].eyebrow}</p>
+                <h2 id="platform-heading">{platformCopy[locale].heading}</h2>
+              </div>
+              <p>{platformCopy[locale].intro}</p>
+            </div>
+            <div class="platform-grid">
+              {platformCopy[locale].platforms.map((platform, index) => (
+                <article class="platform-card">
+                  <div class="platform-card-top">
+                    <span class="platform-index">0{index + 1}</span>
+                    <span class="platform-code">{platform.code}</span>
+                  </div>
+                  <div class="platform-mark" aria-hidden="true">
+                    <img
+                      src="/brand/nguyen-linh-protector-mark.svg"
+                      alt=""
+                      width="48"
+                      height="48"
+                    />
+                  </div>
+                  <h3>{platform.name}</h3>
+                  <p>{platform.description}</p>
+                  <a class="platform-login" href={platform.url}>
+                    {platformCopy[locale].login}
+                    <span aria-hidden="true">↗</span>
+                  </a>
+                </article>
+              ))}
+            </div>
+            <p class="platform-privacy-note">
+              <span aria-hidden="true">i</span>
+              {platformCopy[locale].privacyNote}
+            </p>
+          </section>
+          <section class="platform-help">
+            <div class="container platform-help-inner">
+              <div>
+                <p class="eyebrow">{locale === 'en' ? 'Support' : 'Hỗ trợ'}</p>
+                <h2>{platformCopy[locale].helpHeading}</h2>
+                <p>{platformCopy[locale].helpText}</p>
+              </div>
+              <a class="button" href={pairs.contact[locale]}>
+                {platformCopy[locale].contact}
+                <span aria-hidden="true">↗</span>
+              </a>
+            </div>
+          </section>
+        </>
+      )}
+      {isService && <InquiryCTA locale={locale} />}
+    </>
+  )}
+</Base>

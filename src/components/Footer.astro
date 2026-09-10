@@ -1,0 +1,60 @@
+---
+import { business, pairs, serviceKeys, type Locale } from '../i18n/routes';
+import { copy } from '../i18n/copy';
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const t = copy[locale];
+---
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <a class="footer-logo" href={pairs.home[locale]}>
+          <img
+            src="/brand/nguyen-linh-protector-mark-dark.svg"
+            width="58"
+            height="58"
+            loading="lazy"
+            alt=""
+          />
+          <span class="footer-wordmark">
+            NGUYEN LINH <span>PROTECTOR</span>
+          </span>
+        </a>
+        <p>IP Enforcement &amp; Brand Protection</p>
+        <p>
+          Nguyen Linh Protector LLC
+          <br />
+          Wyoming Original ID: {business.id}
+        </p>
+      </div>
+      <div>
+        <h2>{t.services}</h2>
+        {serviceKeys.map((key) => (
+          <a href={pairs[key][locale]}>{t.pages[key].title}</a>
+        ))}
+      </div>
+      <div>
+        <h2>{t.nav[4]}</h2>
+        <a href={`mailto:${business.email}`}>{business.email}</a>
+        <a href={`tel:${business.phone}`}>{business.displayPhone}</a>
+        <p>
+          <strong>{t.registered}</strong>
+          <br />
+          {business.address}
+        </p>
+      </div>
+    </div>
+    <p class="disclaimer">{t.disclaimer}</p>
+    <div class="footer-bottom">
+      <span>© {new Date().getUTCFullYear()} Nguyen Linh Protector LLC</span>
+      <div>
+        <a href={pairs.privacy[locale]}>{t.pages.privacy.title}</a>
+        <a href={pairs.terms[locale]}>{t.pages.terms.title}</a>
+      </div>
+    </div>
+  </div>
+</footer>
