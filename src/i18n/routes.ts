@@ -31,11 +31,29 @@ export const pairs = {
     en: '/insights/brand-protection-evidence-checklist/',
     vi: '/vi/kien-thuc/danh-sach-bang-chung-thuong-hieu/',
   },
+  dmcaProcess: {
+    en: '/insights/dmca-takedown-process/',
+    vi: '/vi/kien-thuc/quy-trinh-go-bo-dmca/',
+  },
+  copyrightTrademark: {
+    en: '/insights/copyright-vs-trademark-infringement/',
+    vi: '/vi/kien-thuc/phan-biet-vi-pham-ban-quyen-va-nhan-hieu/',
+  },
+  afterTakedown: {
+    en: '/insights/what-happens-after-dmca-takedown-or-counter-notice/',
+    vi: '/vi/kien-thuc/sau-khi-noi-dung-bi-go-hoac-nhan-counter-claim/',
+  },
 } as const;
 export type PageKey = keyof typeof pairs;
 export type MainKey = Exclude<
   PageKey,
-  'document' | 'notice' | 'counterGuide' | 'evidence'
+  | 'document'
+  | 'notice'
+  | 'counterGuide'
+  | 'evidence'
+  | 'dmcaProcess'
+  | 'copyrightTrademark'
+  | 'afterTakedown'
 >;
 export const mainKeys: MainKey[] = [
   'home',

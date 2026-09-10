@@ -31,7 +31,13 @@ const serviceKey = serviceKeys.find((key) => key === pageKey);
 const isService = Boolean(serviceKey);
 const articles =
   pageKey === 'insights' || pageKey === 'home'
-    ? await getCollection('insights', ({ data }) => data.locale === locale)
+    ? (await getCollection('insights', ({ data }) => data.locale === locale))
+        .sort(
+          (a, b) =>
+            b.data.published.getTime() - a.data.published.getTime() ||
+            a.data.title.localeCompare(b.data.title),
+        )
+        .slice(0, pageKey === 'home' ? 3 : undefined)
     : [];
 const sections = serviceKey
   ? serviceContent[locale][serviceKey]

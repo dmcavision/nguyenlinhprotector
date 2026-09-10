@@ -20,7 +20,7 @@ npm run validate
 npm run preview
 ```
 
-Build output: `dist/`. Preview: `http://localhost:4321`. All 32 content routes are prerendered, with a separate `404.html`. The static site builds without credentials. Successful contact delivery requires the environment variables listed in `.env.example`; use `vercel dev` for an end-to-end local Function test.
+Build output: `dist/`. Preview: `http://localhost:4321`. All 38 content routes are prerendered, with a separate `404.html`. The static site builds without credentials. Successful contact delivery requires the environment variables listed in `.env.example`; use `vercel dev` for an end-to-end local Function test.
 
 ## Project structure
 
@@ -29,7 +29,7 @@ Build output: `dist/`. Preview: `http://localhost:4321`. All 32 content routes a
 - `src/i18n/discovery.ts`: bilingual issue-selection and homepage guide introductions.
 - `src/i18n/content.ts`: substantive service pages, privacy policy, and terms in both languages.
 - `src/content.config.ts`: article schema and content loader.
-- `src/content/insights/`: three English articles and corresponding Vietnamese translations.
+- `src/content/insights/`: seven English articles and corresponding Vietnamese translations.
 - `src/components/`: shared page rendering, header, footer, language switcher, breadcrumbs, service cards, process steps, inquiry CTA, SEO, and JSON-LD.
 - `api/contact.ts`: validated Vercel Function for Resend inquiry and acknowledgment emails.
 - `api/resend-webhook.ts`: signed Resend webhook receiver for delivery, bounce, failure, and complaint events.
@@ -39,7 +39,7 @@ Build output: `dist/`. Preview: `http://localhost:4321`. All 32 content routes a
 - `public/brand/`: approved SVG logo assets and an Apple Touch Icon exported from the approved mark.
 - `scripts/`: generated-output, browser accessibility/layout, and Lighthouse checks.
 
-The header provides direct links to all four services through a native desktop disclosure and the mobile navigation. Both homepages include an issue selector and reuse `InsightCards.astro` to feature the four localized Content Collection articles.
+The header provides direct links to all four services through a native desktop disclosure and the mobile navigation. Both homepages include an issue selector and feature the three newest localized articles; the Insights pages list all seven article pairs.
 
 ## Content and branding
 
@@ -119,23 +119,26 @@ The GitHub repository, Vercel production deployment, custom domain, Google Searc
 
 ## Complete route list
 
-| English                                             | Vietnamese                                             |
-| --------------------------------------------------- | ------------------------------------------------------ |
-| `/`                                                 | `/vi/`                                                 |
-| `/copyright-enforcement/`                           | `/vi/bao-ve-ban-quyen/`                                |
-| `/dmca-takedown/`                                   | `/vi/go-bo-dmca/`                                      |
-| `/counter-claim/`                                   | `/vi/phan-doi-yeu-cau-go-bo/`                          |
-| `/brand-protection/`                                | `/vi/bao-ve-thuong-hieu/`                              |
-| `/how-it-works/`                                    | `/vi/quy-trinh/`                                       |
-| `/about/`                                           | `/vi/gioi-thieu/`                                      |
-| `/insights/`                                        | `/vi/kien-thuc/`                                       |
-| `/contact/`                                         | `/vi/lien-he/`                                         |
-| `/platform-logins/`                                 | `/vi/dang-nhap-nen-tang/`                              |
-| `/privacy-policy/`                                  | `/vi/chinh-sach-bao-mat/`                              |
-| `/terms-of-use/`                                    | `/vi/dieu-khoan-su-dung/`                              |
-| `/insights/document-online-copyright-infringement/` | `/vi/kien-thuc/ghi-nhan-vi-pham-ban-quyen-truc-tuyen/` |
-| `/insights/dmca-notice-information/`                | `/vi/kien-thuc/thong-tin-thong-bao-dmca/`              |
-| `/insights/dmca-counter-notification-guide/`        | `/vi/kien-thuc/huong-dan-thong-bao-phan-doi-dmca/`     |
-| `/insights/brand-protection-evidence-checklist/`    | `/vi/kien-thuc/danh-sach-bang-chung-thuong-hieu/`      |
+| English                                                         | Vietnamese                                                      |
+| --------------------------------------------------------------- | --------------------------------------------------------------- |
+| `/`                                                             | `/vi/`                                                          |
+| `/copyright-enforcement/`                                       | `/vi/bao-ve-ban-quyen/`                                         |
+| `/dmca-takedown/`                                               | `/vi/go-bo-dmca/`                                               |
+| `/counter-claim/`                                               | `/vi/phan-doi-yeu-cau-go-bo/`                                   |
+| `/brand-protection/`                                            | `/vi/bao-ve-thuong-hieu/`                                       |
+| `/how-it-works/`                                                | `/vi/quy-trinh/`                                                |
+| `/about/`                                                       | `/vi/gioi-thieu/`                                               |
+| `/insights/`                                                    | `/vi/kien-thuc/`                                                |
+| `/contact/`                                                     | `/vi/lien-he/`                                                  |
+| `/platform-logins/`                                             | `/vi/dang-nhap-nen-tang/`                                       |
+| `/privacy-policy/`                                              | `/vi/chinh-sach-bao-mat/`                                       |
+| `/terms-of-use/`                                                | `/vi/dieu-khoan-su-dung/`                                       |
+| `/insights/document-online-copyright-infringement/`             | `/vi/kien-thuc/ghi-nhan-vi-pham-ban-quyen-truc-tuyen/`          |
+| `/insights/dmca-notice-information/`                            | `/vi/kien-thuc/thong-tin-thong-bao-dmca/`                       |
+| `/insights/dmca-counter-notification-guide/`                    | `/vi/kien-thuc/huong-dan-thong-bao-phan-doi-dmca/`              |
+| `/insights/brand-protection-evidence-checklist/`                | `/vi/kien-thuc/danh-sach-bang-chung-thuong-hieu/`               |
+| `/insights/dmca-takedown-process/`                              | `/vi/kien-thuc/quy-trinh-go-bo-dmca/`                           |
+| `/insights/copyright-vs-trademark-infringement/`                | `/vi/kien-thuc/phan-biet-vi-pham-ban-quyen-va-nhan-hieu/`       |
+| `/insights/what-happens-after-dmca-takedown-or-counter-notice/` | `/vi/kien-thuc/sau-khi-noi-dung-bi-go-hoac-nhan-counter-claim/` |
 
 Additional output: `/404.html`, `/robots.txt`, `/sitemap-index.xml`, and `/sitemap-0.xml`.
