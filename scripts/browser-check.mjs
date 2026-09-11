@@ -7,6 +7,7 @@ const browser = await chromium.launch({ channel: 'chrome', headless: true });
 const results = [];
 const errors = [];
 const context = await browser.newContext();
+await context.addInitScript(() => localStorage.setItem('nlp_intro_seen', '1'));
 let page = await context.newPage();
 for (const width of [1440, 390, 320]) {
   await page.setViewportSize({ width, height: 1000 });
@@ -91,6 +92,20 @@ if (
   )) !== 'auto'
 )
   errors.push('Reduced motion');
+const introContext = await browser.newContext({
+  reducedMotion: 'no-preference',
+});
+const introPage = await introContext.newPage();
+await introPage.goto('http://127.0.0.1:4321/');
+if (!(await introPage.locator('.site-intro').isVisible()))
+  errors.push('First-visit intro is not visible');
+await introPage.waitForTimeout(1700);
+if (await introPage.locator('.site-intro').isVisible())
+  errors.push('First-visit intro does not finish');
+await introPage.reload();
+if (await introPage.locator('.site-intro').isVisible())
+  errors.push('Intro repeats after the first visit');
+await introContext.close();
 await browser.close();
 const report = { results, keyboard: true, textZoom: '200%', errors };
 await writeFile('reports/browser.json', JSON.stringify(report, null, 2));

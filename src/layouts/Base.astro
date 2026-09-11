@@ -21,8 +21,44 @@ const { locale, pageKey, ...seo } = Astro.props;
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <SEO locale={locale} pageKey={pageKey} {...seo} />
+    <script is:inline>
+      (() => {
+        const key = 'nlp_intro_seen';
+        let seen = true;
+        try {
+          seen = localStorage.getItem(key) === '1';
+          if (!seen) localStorage.setItem(key, '1');
+        } catch {}
+        if (seen || matchMedia('(prefers-reduced-motion: reduce)').matches) {
+          document.documentElement.classList.add('intro-seen');
+          return;
+        }
+        document.documentElement.classList.add('intro-playing');
+        const finish = () =>
+          setTimeout(() => {
+            document.documentElement.classList.remove('intro-playing');
+            document.documentElement.classList.add('intro-seen');
+          }, 1600);
+        if (document.readyState === 'loading')
+          addEventListener('DOMContentLoaded', finish, { once: true });
+        else finish();
+      })();
+    </script>
   </head>
   <body>
+    <div class="site-intro" aria-hidden="true">
+      <div class="site-intro-inner">
+        <span class="site-intro-orbit"></span>
+        <img
+          src="/brand/nguyen-linh-protector-mark-dark.svg"
+          width="128"
+          height="128"
+          alt=""
+        />
+        <span class="site-intro-name">Nguyen Linh Protector</span>
+        <span class="site-intro-line"></span>
+      </div>
+    </div>
     <Header locale={locale} pageKey={pageKey} />
     <main id="main" tabindex="-1">
       <slot />

@@ -108,7 +108,7 @@ export const copy: Record<Locale, Copy> = {
         description:
           'How Nguyen Linh Protector handles website visits, inquiry information, enforcement records, and privacy requests.',
         intro:
-          'This policy describes information handled through this website and initial inquiries. Last updated: September 10, 2026.',
+          'This policy describes information handled through this website and initial inquiries. Last updated: September 11, 2026.',
       },
       terms: {
         title: 'Terms of Use',
@@ -273,7 +273,7 @@ export const copy: Record<Locale, Copy> = {
         description:
           'Cách Nguyen Linh Protector xử lý thông tin truy cập, yêu cầu liên hệ, hồ sơ thực thi và đề nghị về quyền riêng tư.',
         intro:
-          'Chính sách này mô tả việc xử lý thông tin qua website và các yêu cầu liên hệ ban đầu. Cập nhật ngày 10 tháng 9 năm 2026.',
+          'Chính sách này mô tả việc xử lý thông tin qua website và các yêu cầu liên hệ ban đầu. Cập nhật ngày 11 tháng 9 năm 2026.',
       },
       terms: {
         title: 'Điều khoản sử dụng',

@@ -294,7 +294,7 @@ export const policies: Record<
       },
       {
         heading: 'Website delivery and local storage',
-        text: 'This website includes a contact form but does not include advertising trackers, analytics scripts, or nonessential cookies. The hosting provider may process technical request information, such as IP address, browser details, requested pages, and timestamps, to deliver and secure the website and contact endpoint. Resend processes form messages for email delivery. Email and telephone providers handle communications through their services.',
+        text: 'This website includes a contact form but does not include advertising trackers, analytics scripts, or nonessential cookies. It stores one value in your browser to remember that the opening logo animation has been shown; this value contains no identity or inquiry information. The hosting provider may process technical request information, such as IP address, browser details, requested pages, and timestamps, to deliver and secure the website and contact endpoint. Resend processes form messages for email delivery. Email and telephone providers handle communications through their services.',
       },
       {
         heading: 'How information is used',
@@ -356,7 +356,7 @@ export const policies: Record<
       },
       {
         heading: 'Phân phối website và lưu trữ cục bộ',
-        text: 'Website có biểu mẫu liên hệ nhưng không có công cụ theo dõi quảng cáo, mã phân tích hoặc cookie không thiết yếu. Nhà cung cấp lưu trữ có thể xử lý địa chỉ IP, thông tin trình duyệt, trang được yêu cầu và thời điểm truy cập để phân phối, bảo vệ website và điểm tiếp nhận biểu mẫu. Resend xử lý nội dung biểu mẫu để chuyển email. Nhà cung cấp email và điện thoại xử lý trao đổi qua dịch vụ của họ.',
+        text: 'Website có biểu mẫu liên hệ nhưng không có công cụ theo dõi quảng cáo, mã phân tích hoặc cookie không thiết yếu. Website lưu một giá trị trong trình duyệt để ghi nhớ hiệu ứng logo mở đầu đã được hiển thị; giá trị này không chứa thông tin nhận dạng hoặc nội dung yêu cầu. Nhà cung cấp lưu trữ có thể xử lý địa chỉ IP, thông tin trình duyệt, trang được yêu cầu và thời điểm truy cập để phân phối, bảo vệ website và điểm tiếp nhận biểu mẫu. Resend xử lý nội dung biểu mẫu để chuyển email. Nhà cung cấp email và điện thoại xử lý trao đổi qua dịch vụ của họ.',
       },
       {
         heading: 'Mục đích sử dụng',

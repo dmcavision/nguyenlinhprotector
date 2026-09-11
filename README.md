@@ -64,11 +64,11 @@ npm run test:lighthouse
 
 The browser script uses installed Google Chrome through Playwright. It visits every content route at 1440px, 390px, and 320px, scans all routes at mobile size with axe WCAG A/AA checks, exercises keyboard navigation, checks representative pages at 200% text size, and verifies reduced motion. It saves screenshots and results under ignored `reports/`.
 
-Lighthouse runs against the local production preview using mobile simulation for both homepages, the English DMCA article, and the Vietnamese contact page. Chrome is discovered automatically; set `CHROME_PATH` if necessary. Reports are saved under `reports/`. Scores are lab measurements, not guarantees for a deployed site. INP needs real user interaction data; a zero-JavaScript implementation and measured TBT are not an INP measurement.
+Lighthouse runs against the local production preview using mobile simulation for both homepages, the English DMCA article, and the Vietnamese contact page. Chrome is discovered automatically; set `CHROME_PATH` if necessary. Reports are saved under `reports/`. Scores are lab measurements, not guarantees for a deployed site. INP needs real user interaction data; the small first-party scripts and measured TBT are not an INP measurement.
 
 `npm run validate` checks every generated content route, unique metadata, one H1, canonical and alternate URLs, corresponding language switches, internal links and fragments, JSON-LD parsing, image attributes, controlled contact scripts/forms, social-image metadata, common placeholders, sitemap alternatives, robots, and the 404 noindex directive. JSON-LD parsing does not substitute for search-engine rich-result eligibility checks after deployment.
 
-Production HTML and CSS are minified. Astro emits hashed CSS under `/_astro/`, suitable for Vercel’s static asset caching. The only browser script handles contact-form status without a UI framework. The root `api/contact.ts` endpoint is deployed as a Vercel Function, so no Astro server adapter or `vercel.json` is required. Retest response headers, function delivery, and performance on the live domain.
+Production HTML and CSS are minified. Astro emits hashed CSS under `/_astro/`, suitable for Vercel’s static asset caching. Small first-party browser scripts remember the one-time logo intro and handle contact-form status without a UI framework. The root `api/contact.ts` endpoint is deployed as a Vercel Function, so no Astro server adapter or `vercel.json` is required. Retest response headers, function delivery, and performance on the live domain.
 
 ## Contact form and Resend
 

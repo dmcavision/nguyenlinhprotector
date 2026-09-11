@@ -66,7 +66,7 @@ for (const pair of Object.values(pairs))
     const isContact = route === pairs.contact[locale];
     const clientScripts = $('script:not([type="application/ld+json"])');
     check(
-      isContact ? clientScripts.length === 1 : clientScripts.length === 0,
+      clientScripts.length === (isContact ? 2 : 1),
       `Client script ${route}`,
     );
     check(!$('meta[name="keywords"]').length, `Meta keywords ${route}`);
